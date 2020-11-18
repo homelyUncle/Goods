@@ -25,5 +25,5 @@ def add_line():
     count_of_belt = input_nums()
 
     res = {'name': type_of_belt, 'count': count_of_belt}
-    # возвращем данные (key: str, value: int)
+    # возвращем словарь (key: str, value: int)
     return res

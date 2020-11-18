@@ -1,7 +1,7 @@
 import write_data
 
-def add(all_data):
+
+def add():
     data = write_data.add_line()
-    all_data = all_data.append(data)
-    print(f'\n### belt {data} added ###\n')
-    return all_data
+    print(f"\n\t\t- - item <{data['name']}> added - -\n")
+    return data
