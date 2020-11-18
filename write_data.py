@@ -23,8 +23,7 @@ def add_line():
 
     type_of_belt = input_type()
     count_of_belt = input_nums()
-    ret = {type_of_belt: count_of_belt}
-    # возвращем данные (key: str, value: int)
-    return ret
 
-print(add_line())
+    res = {'name': type_of_belt, 'count': count_of_belt}
+    # возвращем данные (key: str, value: int)
+    return res
