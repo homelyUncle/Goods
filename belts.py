@@ -1,22 +1,58 @@
-import read_data as rd
-import write_data as wd
-import gui
+import json
+import write_data
+import time
 
-FILE_PATH = 'belts.txt'
+FILE_PATH = 'belts_data.json'
 
-belts = {}
+def write_all(path, data):
+    with open(path, 'w', encoding='utf-8') as write_file:
+        json.dump(data, write_file)
 
-line = wd.add_line()
-belts[line[0]] = line[1]
+def read_all(path):
+    with open(path, 'r', encoding='utf-8') as read_file:
+        data = json.load(read_file)
+        return data
 
-gui.
 
-# сохранение фала перед закрытием приложения
+def main(file_path):
+    global all_data
 
-# создание строки таблицы
-new_string = f'{type_of_belt}{tab}|\t{count_of_belt}\n' \
-                 f'————————————————————————————\n'
-with open(FILE_PATH, 'a', encoding='utf-8') as file:
-    file.write(new_string)
+    try:
+        all_data = read_all(file_path)
+    except FileNotFoundError:
+        print('file does not exist')
+        to_make_file = input('Do you want to create file and add some data? (y/n)\n')
+        if to_make_file == 'y':
+            all_data = write_data.add_line()
+            print(f'\n### item {all_data} added ###')
+        else:
+            print('thank you for using my app')
+            time.sleep(2)
+            raise SystemExit(0)
 
-print(belts)
+
+    while(True):
+        ask = input("what do you want to do?"
+                    "\n\t\t(type: 'f' to find, 's' to see all content,"
+                    "\n\t\t'a' to add some data, 'q' for quite program):\n")
+        if ask == 's':
+            print(all_data)
+        elif ask == 'a':
+            data = write_data.add_line()
+            all_data = data | all_data
+            print(f'\n### belt {data} added ###')
+        elif ask == 'f':
+            pass
+        elif ask == 'q':
+            write_all(FILE_PATH, all_data)
+            print('thank you for using my app')
+            time.sleep(2)
+            raise SystemExit(0)
+
+
+
+
+    # write_all(file_path)
+
+if __name__ == '__main__':
+    main(FILE_PATH)

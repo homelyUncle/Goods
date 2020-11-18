@@ -1,35 +1,29 @@
 def add_line():
 
-    # постоянный запрос названия до получения корректного значения...
-    while True:
-        type_of_belt = input('Input type of belts: ')
-        if type_of_belt == '':  # ...исключая пустые строки...
+    # запрос названия до получения корректного значения...
+    def input_type():
+        name = input('Input type of belts: ')
+        if name == '':  # ...исключая пустые строки...
             print("\t\tYou didn't write anything")
-            continue
-        elif len(type_of_belt) <= 16 and type_of_belt != '':
-            break
-        else:  # ...и исключая названия длиннее
+            input_type()
+        elif len(name) > 16:  # ...и исключая названия длиннее
             print('\t\tThe name you entered is too long')
+            input_type()
+        return name
 
     # постоянный запрос количества до получения корректного значения...
-    while True:
-        count_of_belt = input('Input count of belts: ')
+    def input_nums():
+        count_int = 0
+        count = input('Input count of belts: ')
         try:
-            int(count_of_belt)
-            break
+            count_int = int(count)
         except ValueError:  # ...исключая возможность ввода литер
             print('\t\tYou entered not an integer')
+            input_nums()
+        return count_int
 
-    # регулирование количества "табуляций" для выравнивания таблицы
-    tab = '\t'
-    if len(type_of_belt) < 4:
-        tab *= 5
-    elif len(type_of_belt) < 8:
-        tab *= 4
-    elif len(type_of_belt) < 12:
-        tab *= 3
-    elif len(type_of_belt) < 16:
-        tab *= 2
-
-    # возвращем данные (key, value)
-    return type_of_belt, count_of_belt
+    type_of_belt = input_type()
+    count_of_belt = input_nums()
+    ret = {type_of_belt: count_of_belt}
+    # возвращем данные (key: str, value: int)
+    return ret
