@@ -5,6 +5,10 @@ import json
 FILE_PATH = 'belts_data.json'
 
 
+def edit():
+    pass
+
+
 def add():
     data = add_line()
     print(f"\n\t\t- - товар <{data['name']}> добавлен в список - -\n")
@@ -12,15 +16,14 @@ def add():
 
 
 def add_line():
-
     # запрос названия до получения корректного значения...
     def input_type():
         name = input('Введите название: ')
         if name == '':  # ...исключая пустые строки...
-            print("\t\tВы ничего не ввели")
+            print("\tВы ничего не ввели")
             name = input_type()
         elif len(name) > 16:  # ...и исключая названия длиннее
-            print('\t\tВведённое название слишком длинное (max 16)')
+            print('\tВведённое название слишком длинное (max 16)')
             name = input_type()
         return name
 
@@ -65,7 +68,7 @@ def main(file_path):  # запуск программы
     try:
         all_data = read_from_file(file_path)  # попытка чтения файла и записи данных в переменную
     except FileNotFoundError:  # создаём новый файл
-        print('\n\t\t- - ФАЙЛ С ДАННЫМИ ОТСУТСВУЕТ - -\n')
+        print('\n\t- - ФАЙЛ С ДАННЫМИ ОТСУТСВУЕТ - -\n')
         to_make_file = input('Хотите добавить запись? (y/n)\n')
         if to_make_file == 'y' or to_make_file == 'Y' or to_make_file == 'н' or to_make_file == 'Н':
             all_data = [add()]
@@ -73,15 +76,15 @@ def main(file_path):  # запуск программы
             end()
 
     while True:
-        action = input("Что нужно сделать?"  # типа меню
+        action = input("-= Главное меню =-"  # типа меню
                        "\n\t\t's' показать все товары"
-                       "\n\t\t'i' показать информацию об одном товаре"
-                       "\n\t\t'z' показать товары, отсутствующие на складе"
-                       "\n\t\t'a' добавить товар в список"
+                       "\t\t'i' показать один товар"
+                       "\n\t\t'z' показать отсутствующее"
+                       "\t'a' добавить товар в список"
                        "\n\t\t'c' очистить экран"
-                       "\n\t\t'q' выйти из программы\n")
+                       "\t\t'q' выйти из программы\n")
 
-        if action == 's' or action == 'S' or action == 'ы' or action == 'Ы':   # вывод всего списка
+        if action == 's' or action == 'S' or action == 'ы' or action == 'Ы':  # вывод всего списка
             for i in range(len(all_data)):
                 j = all_data[i]
                 if j['count'] == 0:
@@ -92,19 +95,50 @@ def main(file_path):  # запуск программы
                     warn = '\t-- ПОСЛЕДНИЕ!!! --'
                 else:
                     warn = ''
-                print(f"\t\t{i + 1} ->\t{j['name']} ____ {j['count']} {warn}")
+                print(f"\t\t{i + 1}\t{j['name']} ____ {j['count']} {warn}")
             print()
 
         elif action == 'a' or action == 'A' or action == 'ф' or action == 'Ф':  # добавление записи
             all_data.append(add())
 
         elif action == 'i' or action == 'I' or action == 'ш' or action == 'Ш':  # вывод информации об одной записи
-            choose = input('введите название/часть названия товара, который нужно найти: ')
+            founded = []
+            ct = 0
+            find_to_item = input('введите название/часть названия товара, который нужно найти: ')
             for i in all_data:
-                if choose in i['name']:
-                    out = f"\t{i['name']} ____ {i['count']}"
+                if find_to_item in i['name']:
+                    dic = {'name': i['name'], 'count': i['count']}
+                    if len(founded) == 0:
+                        founded = [dic]
+                    else:
+                        founded.append(dic)
+                    out = f"\t{ct + 1}<\t{i['name']}\t>{i['count']}"
                     print(out)
-            print()
+                ct += 1
+            if ct > 0:
+                while True:
+                    while True:
+                        line = input('введите номер необходимой строки:')
+                        try:
+                            line = int(line)
+                            break
+                        except ValueError:  # ...исключая возможность ввода литер
+                            print('\t\tВы ввели не число\n')
+                    if line in range(ct):
+                        break
+                    else:
+                        print('введён неверный номер')
+                ct = line
+                TODO: 'вынести в разные методы обработчикисобытий'
+
+            choose_action = input("выберите действие:"
+                                  "\n\t\t'с' изменить количество"
+                                  "\t\t'n' изменить название"
+                                  "\n\t\t'd' удалить запись"
+                                  "\t\t\t'm' вернуться в 'главное меню'\n")
+            if choose_action == 'c' or choose_action == 'C' or choose_action == 'с' or choose_action == 'С':
+                change_count = input('Введите новое количество: ')
+                print(change_count)
 
         elif action == 'z' or action == 'Z' or action == 'я' or action == 'Я':  # вывод записей с нулевыми значениями
             print('\n\t-- ТОВАРА, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
