@@ -26,10 +26,6 @@ def input_type():
     return name
 
 
-def edit():
-    pass
-
-
 def find(all_items, item_to_find):
     founded_index = []
     ct = 0
@@ -73,7 +69,7 @@ def show_all(all_items):
             warn = '\t-- ПОСЛЕДНИЕ!!! --'
         else:
             warn = ''
-        print(f"\t\t{i + 1}\t{j['name']} ____ {j['count']} {warn}")
+        print(f"\t{i + 1}\t{j['name']} ____ {j['count']} {warn}")
 
 
 def add():
@@ -152,12 +148,17 @@ def main(file_path):  # запуск программы
             if choose_action == 'c' or choose_action == 'C' or choose_action == 'с' or choose_action == 'С':
                 new_count = input_nums()
                 index_changing_count['count'] = new_count
+                print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
 
             if choose_action == 'n' or choose_action == 'N' or choose_action == 'т' or choose_action == 'Т':
-                pass
+                new_name = input_type()
+                index_changing_count['name'] = new_name
+                print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
+                write_to_file(FILE_PATH, main_list)
             if choose_action == 'd' or choose_action == 'D' or choose_action == 'в' or choose_action == 'В':
-                pass
+                main_list.remove(index_changing_count)
+                write_to_file(FILE_PATH, main_list)
             if choose_action == 'm' or choose_action == 'M' or choose_action == 'ь' or choose_action == 'Ь':
                 continue
         elif main_menu == 'z' or main_menu == 'Z' or main_menu == 'я' or main_menu == 'Я':  # вывод записей с нулевыми значениями
