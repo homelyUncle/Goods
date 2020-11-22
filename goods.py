@@ -8,6 +8,7 @@ FILE_PATH = 'belts_data.json'
 def edit():
     pass
 
+
 def find(all_items, item_to_find):
     founded_index = []
     ct = 0
@@ -25,7 +26,7 @@ def find(all_items, item_to_find):
     if ct > 1:
         while True:
             while True:
-                line = input('введите номер необходимой строки:')
+                line = input('введите номер необходимой строки: ')
                 try:
                     line = int(line)
                     break
@@ -140,7 +141,6 @@ def main(file_path):  # запуск программы
         elif action == 'i' or action == 'I' or action == 'ш' or action == 'Ш':  # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
             print(main_list[find(main_list, finding_item)])
-            TODO: 'вынести в разные методы обработчикисобытий'
 
             choose_action = input("выберите действие:"
                                   "\n\t\t'с' изменить количество"
