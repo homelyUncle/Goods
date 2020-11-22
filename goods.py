@@ -9,6 +9,20 @@ def edit():
     pass
 
 
+def show_all(all_items):
+    for i in range(len(all_items)):
+        j = all_items[i]
+        if j['count'] == 0:
+            warn = '\t-- ТОВАРА НЕТ НА СКЛАДЕ!!! --'
+        elif j['count'] < 2:
+            warn = '\t-- ПОСЛЕДНИЙ!!! --'
+        elif j['count'] < 3:
+            warn = '\t-- ПОСЛЕДНИЕ!!! --'
+        else:
+            warn = ''
+        print(f"\t\t{i + 1}\t{j['name']} ____ {j['count']} {warn}")
+
+
 def add():
     data = add_line()
     print(f"\n\t\t- - товар <{data['name']}> добавлен в список - -\n")
@@ -72,6 +86,7 @@ def main(file_path):  # запуск программы
         to_make_file = input('Хотите добавить запись? (y/n)\n')
         if to_make_file == 'y' or to_make_file == 'Y' or to_make_file == 'н' or to_make_file == 'Н':
             all_data = [add()]
+            write_to_file(FILE_PATH, all_data)
         else:
             end()
 
@@ -82,24 +97,14 @@ def main(file_path):  # запуск программы
                        "\n\t\t'z' показать отсутствующее"
                        "\t'a' добавить товар в список"
                        "\n\t\t'c' очистить экран"
-                       "\t\t'q' выйти из программы\n")
+                       "\t\t\t'q' выйти из программы\n")
 
         if action == 's' or action == 'S' or action == 'ы' or action == 'Ы':  # вывод всего списка
-            for i in range(len(all_data)):
-                j = all_data[i]
-                if j['count'] == 0:
-                    warn = '\t-- ТОВАРА НЕТ НА СКЛАДЕ!!! --'
-                elif j['count'] < 2:
-                    warn = '\t-- ПОСЛЕДНИЙ!!! --'
-                elif j['count'] < 3:
-                    warn = '\t-- ПОСЛЕДНИЕ!!! --'
-                else:
-                    warn = ''
-                print(f"\t\t{i + 1}\t{j['name']} ____ {j['count']} {warn}")
-            print()
+            show_all(all_data)
 
         elif action == 'a' or action == 'A' or action == 'ф' or action == 'Ф':  # добавление записи
             all_data.append(add())
+            write_to_file(FILE_PATH, all_data)
 
         elif action == 'i' or action == 'I' or action == 'ш' or action == 'Ш':  # вывод информации об одной записи
             founded = []
