@@ -1,6 +1,7 @@
 import os
 import time
 import json
+from sys import platform
 
 FILE_PATH = 'belts_data.json'
 
@@ -122,12 +123,12 @@ def main(file_path):  # запуск программы
 
     while True:
         main_menu = input("-= Главное меню =-"  # типа меню
-                       "\n\t\t's' показать все товары"
-                       "\t\t'i' показать один товар"
-                       "\n\t\t'z' показать отсутствующее"
-                       "\t'a' добавить товар в список"
-                       "\n\t\t'c' очистить экран"
-                       "\t\t'q' выйти из программы\n")
+                          "\n\t\t's' показать все товары"
+                          "\t\t'i' показать один товар"
+                          "\n\t\t'z' показать отсутствующее"
+                          "\t'a' добавить товар в список"
+                          "\n\t\t'c' очистить экран"
+                          "\t\t'q' выйти из программы\n")
 
         if main_menu == 's' or main_menu == 'S' or main_menu == 'ы' or main_menu == 'Ы':  # вывод всего списка
             show_all(main_list)
@@ -136,7 +137,8 @@ def main(file_path):  # запуск программы
             main_list.append(add())
             write_to_file(FILE_PATH, main_list)
 
-        elif main_menu == 'i' or main_menu == 'I' or main_menu == 'ш' or main_menu == 'Ш':  # вывод информации об одной записи
+        elif main_menu == 'i' or main_menu == 'I' or main_menu == 'ш' or main_menu == 'Ш':
+            # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
             index_changing_count = main_list[find(main_list, finding_item)]
 
@@ -161,7 +163,8 @@ def main(file_path):  # запуск программы
                 write_to_file(FILE_PATH, main_list)
             if choose_action == 'm' or choose_action == 'M' or choose_action == 'ь' or choose_action == 'Ь':
                 continue
-        elif main_menu == 'z' or main_menu == 'Z' or main_menu == 'я' or main_menu == 'Я':  # вывод записей с нулевыми значениями
+        elif main_menu == 'z' or main_menu == 'Z' or main_menu == 'я' or main_menu == 'Я':
+            # вывод записей с нулевыми значениями
             print('\n\t-- ТОВАРА, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
             for i in main_list:
                 if i['count'] == 0:
@@ -173,7 +176,11 @@ def main(file_path):  # запуск программы
             end()
 
         elif main_menu == 'c' or main_menu == 'C' or main_menu == 'с' or main_menu == 'С':  # очистка экрана
-            os.system('cls')
+            if platform == "win32":
+                command = 'cls'
+            else:
+                command = 'clear'
+            os.system(command)
 
 
 if __name__ == '__main__':
