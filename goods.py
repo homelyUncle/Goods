@@ -8,6 +8,37 @@ FILE_PATH = 'belts_data.json'
 def edit():
     pass
 
+def find(all_items, item_to_find):
+    founded_index = []
+    ct = 0
+    for i in all_items:
+        if item_to_find in i['name']:
+            if len(founded_index) == 0:
+                founded_index = [all_items.index(i)]
+            else:
+                founded_index.append(all_items.index(i))
+            out = f"\t{ct + 1}\t{i['name']}\t{i['count']}"
+            print(out)
+        else:
+            continue
+        ct += 1
+    if ct > 1:
+        while True:
+            while True:
+                line = input('введите номер необходимой строки:')
+                try:
+                    line = int(line)
+                    break
+                except ValueError:  # ...исключая возможность ввода литер
+                    print('\t\tВы ввели не число\n')
+            if line - 1 in range(ct):
+                break
+            else:
+                print('введён неверный номер')
+        return founded_index[line - 1]
+    else:
+        return founded_index[ct - 1]
+
 
 def show_all(all_items):
     for i in range(len(all_items)):
@@ -77,16 +108,16 @@ def end():
 
 
 def main(file_path):  # запуск программы
-    all_data = []
+    main_list = []
 
     try:
-        all_data = read_from_file(file_path)  # попытка чтения файла и записи данных в переменную
+        main_list = read_from_file(file_path)  # попытка чтения файла и записи данных в переменную
     except FileNotFoundError:  # создаём новый файл
         print('\n\t- - ФАЙЛ С ДАННЫМИ ОТСУТСВУЕТ - -\n')
         to_make_file = input('Хотите добавить запись? (y/n)\n')
         if to_make_file == 'y' or to_make_file == 'Y' or to_make_file == 'н' or to_make_file == 'Н':
-            all_data = [add()]
-            write_to_file(FILE_PATH, all_data)
+            main_list = [add()]
+            write_to_file(FILE_PATH, main_list)
         else:
             end()
 
@@ -97,44 +128,19 @@ def main(file_path):  # запуск программы
                        "\n\t\t'z' показать отсутствующее"
                        "\t'a' добавить товар в список"
                        "\n\t\t'c' очистить экран"
-                       "\t\t\t'q' выйти из программы\n")
+                       "\t\t'q' выйти из программы\n")
 
         if action == 's' or action == 'S' or action == 'ы' or action == 'Ы':  # вывод всего списка
-            show_all(all_data)
+            show_all(main_list)
 
         elif action == 'a' or action == 'A' or action == 'ф' or action == 'Ф':  # добавление записи
-            all_data.append(add())
-            write_to_file(FILE_PATH, all_data)
+            main_list.append(add())
+            write_to_file(FILE_PATH, main_list)
 
         elif action == 'i' or action == 'I' or action == 'ш' or action == 'Ш':  # вывод информации об одной записи
-            founded = []
-            ct = 0
-            find_to_item = input('введите название/часть названия товара, который нужно найти: ')
-            for i in all_data:
-                if find_to_item in i['name']:
-                    dic = {'name': i['name'], 'count': i['count']}
-                    if len(founded) == 0:
-                        founded = [dic]
-                    else:
-                        founded.append(dic)
-                    out = f"\t{ct + 1}<\t{i['name']}\t>{i['count']}"
-                    print(out)
-                ct += 1
-            if ct > 0:
-                while True:
-                    while True:
-                        line = input('введите номер необходимой строки:')
-                        try:
-                            line = int(line)
-                            break
-                        except ValueError:  # ...исключая возможность ввода литер
-                            print('\t\tВы ввели не число\n')
-                    if line in range(ct):
-                        break
-                    else:
-                        print('введён неверный номер')
-                ct = line
-                TODO: 'вынести в разные методы обработчикисобытий'
+            finding_item = input('введите название/часть названия товара, который нужно найти: ')
+            print(main_list[find(main_list, finding_item)])
+            TODO: 'вынести в разные методы обработчикисобытий'
 
             choose_action = input("выберите действие:"
                                   "\n\t\t'с' изменить количество"
@@ -147,13 +153,13 @@ def main(file_path):  # запуск программы
 
         elif action == 'z' or action == 'Z' or action == 'я' or action == 'Я':  # вывод записей с нулевыми значениями
             print('\n\t-- ТОВАРА, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
-            for i in all_data:
+            for i in main_list:
                 if i['count'] == 0:
                     print(f"\t\t{i['name']}")
             print()
 
         elif action == 'q' or action == 'Q' or action == 'й' or action == 'Й':  # закрытие программы
-            write_to_file(FILE_PATH, all_data)
+            write_to_file(FILE_PATH, main_list)
             end()
 
         elif action == 'c' or action == 'C' or action == 'с' or action == 'С':  # очистка экрана
