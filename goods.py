@@ -5,6 +5,27 @@ import json
 FILE_PATH = 'belts_data.json'
 
 
+def input_nums():
+    count = input('Введите количество: ')
+    try:
+        count = int(count)
+    except ValueError:  # ...исключая возможность ввода литер
+        print('\t\tВы ввели не число')
+        count = input_nums()
+    return count
+
+
+def input_type():
+    name = input('Введите название: ')
+    if name == '':  # ...исключая пустые строки...
+        print("\tВы ничего не ввели")
+        name = input_type()
+    elif len(name) > 16:  # ...и исключая названия длиннее
+        print('\tВведённое название слишком длинное (max 16)')
+        name = input_type()
+    return name
+
+
 def edit():
     pass
 
@@ -63,27 +84,8 @@ def add():
 
 def add_line():
     # запрос названия до получения корректного значения...
-    def input_type():
-        name = input('Введите название: ')
-        if name == '':  # ...исключая пустые строки...
-            print("\tВы ничего не ввели")
-            name = input_type()
-        elif len(name) > 16:  # ...и исключая названия длиннее
-            print('\tВведённое название слишком длинное (max 16)')
-            name = input_type()
-        return name
-
-    # постоянный запрос количества до получения корректного значения...
-    def input_nums():
-        count = input('Введите количество: ')
-        try:
-            count = int(count)
-        except ValueError:  # ...исключая возможность ввода литер
-            print('\t\tВы ввели не число')
-            count = input_nums()
-        return count
-
     type_of_belt = input_type()
+    # постоянный запрос количества до получения корректного значения...
     count_of_belt = input_nums()
 
     res = {'name': type_of_belt, 'count': count_of_belt}
@@ -123,7 +125,7 @@ def main(file_path):  # запуск программы
             end()
 
     while True:
-        action = input("-= Главное меню =-"  # типа меню
+        main_menu = input("-= Главное меню =-"  # типа меню
                        "\n\t\t's' показать все товары"
                        "\t\t'i' показать один товар"
                        "\n\t\t'z' показать отсутствующее"
@@ -131,16 +133,16 @@ def main(file_path):  # запуск программы
                        "\n\t\t'c' очистить экран"
                        "\t\t'q' выйти из программы\n")
 
-        if action == 's' or action == 'S' or action == 'ы' or action == 'Ы':  # вывод всего списка
+        if main_menu == 's' or main_menu == 'S' or main_menu == 'ы' or main_menu == 'Ы':  # вывод всего списка
             show_all(main_list)
 
-        elif action == 'a' or action == 'A' or action == 'ф' or action == 'Ф':  # добавление записи
+        elif main_menu == 'a' or main_menu == 'A' or main_menu == 'ф' or main_menu == 'Ф':  # добавление записи
             main_list.append(add())
             write_to_file(FILE_PATH, main_list)
 
-        elif action == 'i' or action == 'I' or action == 'ш' or action == 'Ш':  # вывод информации об одной записи
+        elif main_menu == 'i' or main_menu == 'I' or main_menu == 'ш' or main_menu == 'Ш':  # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
-            print(main_list[find(main_list, finding_item)])
+            index_changing_count = main_list[find(main_list, finding_item)]
 
             choose_action = input("выберите действие:"
                                   "\n\t\t'с' изменить количество"
@@ -148,21 +150,28 @@ def main(file_path):  # запуск программы
                                   "\n\t\t'd' удалить запись"
                                   "\t\t\t'm' вернуться в 'главное меню'\n")
             if choose_action == 'c' or choose_action == 'C' or choose_action == 'с' or choose_action == 'С':
-                change_count = input('Введите новое количество: ')
-                print(change_count)
+                new_count = input_nums()
+                index_changing_count['count'] = new_count
+                write_to_file(FILE_PATH, main_list)
 
-        elif action == 'z' or action == 'Z' or action == 'я' or action == 'Я':  # вывод записей с нулевыми значениями
+            if choose_action == 'n' or choose_action == 'N' or choose_action == 'т' or choose_action == 'Т':
+                pass
+            if choose_action == 'd' or choose_action == 'D' or choose_action == 'в' or choose_action == 'В':
+                pass
+            if choose_action == 'm' or choose_action == 'M' or choose_action == 'ь' or choose_action == 'Ь':
+                continue
+        elif main_menu == 'z' or main_menu == 'Z' or main_menu == 'я' or main_menu == 'Я':  # вывод записей с нулевыми значениями
             print('\n\t-- ТОВАРА, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
             for i in main_list:
                 if i['count'] == 0:
                     print(f"\t\t{i['name']}")
             print()
 
-        elif action == 'q' or action == 'Q' or action == 'й' or action == 'Й':  # закрытие программы
+        elif main_menu == 'q' or main_menu == 'Q' or main_menu == 'й' or main_menu == 'Й':  # закрытие программы
             write_to_file(FILE_PATH, main_list)
             end()
 
-        elif action == 'c' or action == 'C' or action == 'с' or action == 'С':  # очистка экрана
+        elif main_menu == 'c' or main_menu == 'C' or main_menu == 'с' or main_menu == 'С':  # очистка экрана
             os.system('cls')
 
 
