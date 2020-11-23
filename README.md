@@ -1,2 +1,2 @@
 # Goods
-Simple application for accounting of goods in a stock
+Simple application for manual accounting of goods in a stock
