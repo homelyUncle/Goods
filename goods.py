@@ -101,6 +101,14 @@ def read_from_file(path):
         return data
 
 
+def clear_screen():
+    if platform == "win32":
+        command = 'cls'
+    else:
+        command = 'clear'
+    os.system(command)
+
+
 def end():
     print('\n\t\t- - спасибо за использование программы - -\n')
     time.sleep(1)
@@ -122,65 +130,69 @@ def main(file_path):  # запуск программы
             end()
 
     while True:
+        print()
         main_menu = input("-= Главное меню =-"  # типа меню
-                          "\n\t\t's' показать все товары"
+                          "\n\t's' показать все товары"
                           "\t\t'i' показать один товар"
-                          "\n\t\t'z' показать отсутствующее"
+                          "\n\t'z' показать отсутствующее"
                           "\t'a' добавить товар в список"
-                          "\n\t\t'c' очистить экран"
+                          "\n\t'c' очистить экран"
                           "\t\t'q' выйти из программы\n")
 
         if main_menu == 's' or main_menu == 'S' or main_menu == 'ы' or main_menu == 'Ы':  # вывод всего списка
+            clear_screen()
             show_all(main_list)
 
         elif main_menu == 'a' or main_menu == 'A' or main_menu == 'ф' or main_menu == 'Ф':  # добавление записи
+            clear_screen()
             main_list.append(add())
             write_to_file(FILE_PATH, main_list)
 
         elif main_menu == 'i' or main_menu == 'I' or main_menu == 'ш' or main_menu == 'Ш':
+            clear_screen()
             # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
             index_changing_count = main_list[find(main_list, finding_item)]
-
+            print()
             choose_action = input("выберите действие:"
-                                  "\n\t\t'с' изменить количество"
+                                  "\n\t'с' изменить количество"
                                   "\t\t'n' изменить название"
-                                  "\n\t\t'd' удалить запись"
-                                  "\t\t\t'm' вернуться в 'главное меню'\n")
+                                  "\n\t'd' удалить запись"
+                                  "\t\t'm' вернуться в 'главное меню'\n")
             if choose_action == 'c' or choose_action == 'C' or choose_action == 'с' or choose_action == 'С':
+                clear_screen()
                 new_count = input_nums()
                 index_changing_count['count'] = new_count
                 print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
 
             if choose_action == 'n' or choose_action == 'N' or choose_action == 'т' or choose_action == 'Т':
+                clear_screen()
                 new_name = input_type()
                 index_changing_count['name'] = new_name
                 print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
             if choose_action == 'd' or choose_action == 'D' or choose_action == 'в' or choose_action == 'В':
+                clear_screen()
                 main_list.remove(index_changing_count)
                 write_to_file(FILE_PATH, main_list)
             if choose_action == 'm' or choose_action == 'M' or choose_action == 'ь' or choose_action == 'Ь':
+                clear_screen()
                 continue
         elif main_menu == 'z' or main_menu == 'Z' or main_menu == 'я' or main_menu == 'Я':
+            clear_screen()
             # вывод записей с нулевыми значениями
-            print('\n\t-- ТОВАРА, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
+            print('\n\t-- ТОВАР, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
             for i in main_list:
                 if i['count'] == 0:
                     print(f"\t\t{i['name']}")
-            print()
 
         elif main_menu == 'q' or main_menu == 'Q' or main_menu == 'й' or main_menu == 'Й':  # закрытие программы
             write_to_file(FILE_PATH, main_list)
             end()
 
         elif main_menu == 'c' or main_menu == 'C' or main_menu == 'с' or main_menu == 'С':  # очистка экрана
-            if platform == "win32":
-                command = 'cls'
-            else:
-                command = 'clear'
-            os.system(command)
+            clear_screen()
 
 
 if __name__ == '__main__':
