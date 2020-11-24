@@ -31,7 +31,7 @@ def find(all_items, item_to_find):
     founded_index = []
     ct = 0
     for i in all_items:
-        if item_to_find in i['name']:
+        if item_to_find in i['name'].lower():
             if len(founded_index) == 0:
                 founded_index = [all_items.index(i)]
             else:
@@ -149,10 +149,9 @@ def main(file_path):  # запуск программы
             write_to_file(FILE_PATH, main_list)
 
         elif main_menu == 'i' or main_menu == 'I' or main_menu == 'ш' or main_menu == 'Ш':
-            clear_screen()
             # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
-            index_changing_count = main_list[find(main_list, finding_item)]
+            index_changing_count = main_list[find(main_list, finding_item.lower())]
             print()
             choose_action = input("выберите действие:"
                                   "\n\t'с' изменить количество"
@@ -160,27 +159,23 @@ def main(file_path):  # запуск программы
                                   "\n\t'd' удалить запись"
                                   "\t\t'm' вернуться в 'главное меню'\n")
             if choose_action == 'c' or choose_action == 'C' or choose_action == 'с' or choose_action == 'С':
-                clear_screen()
                 new_count = input_nums()
                 index_changing_count['count'] = new_count
                 print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
 
             if choose_action == 'n' or choose_action == 'N' or choose_action == 'т' or choose_action == 'Т':
-                clear_screen()
                 new_name = input_type()
                 index_changing_count['name'] = new_name
                 print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
             if choose_action == 'd' or choose_action == 'D' or choose_action == 'в' or choose_action == 'В':
-                clear_screen()
                 main_list.remove(index_changing_count)
                 write_to_file(FILE_PATH, main_list)
             if choose_action == 'm' or choose_action == 'M' or choose_action == 'ь' or choose_action == 'Ь':
                 clear_screen()
                 continue
         elif main_menu == 'z' or main_menu == 'Z' or main_menu == 'я' or main_menu == 'Я':
-            clear_screen()
             # вывод записей с нулевыми значениями
             print('\n\t-- ТОВАР, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
             for i in main_list:
