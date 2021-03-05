@@ -28,6 +28,7 @@ def input_type():
 
 
 def find(all_items, item_to_find):
+    separator = '\t|\t'
     founded_index = []
     ct = 0
     for i in all_items:
@@ -36,11 +37,13 @@ def find(all_items, item_to_find):
                 founded_index = [all_items.index(i)]
             else:
                 founded_index.append(all_items.index(i))
-            out = f"\t{ct + 1}\t{i['name']:15}\t{i['count']:3}"
-            print(out)
+            print(f"\t{ct + 1}\t{i['name']:15}\t{i['count']:3}", end=f'{separator:6}')
+            if ct % 2 == 1:
+                print()
         else:
             continue
         ct += 1
+    print()
     if ct > 1:
         while True:
             while True:
@@ -60,13 +63,18 @@ def find(all_items, item_to_find):
 
 
 def show_all(all_items):
+    separator = '\t|\t'
+    print('-= ОБЩИЙ СПИСОК =-')
     for i in range(len(all_items)):
         j = all_items[i]
         if j['count'] < 3:
-            warn = '\t!!!'
+            warn = '*'
         else:
             warn = ''
-        print(f"{(i + 1)}\t{j['name']:15} ===> {j['count']:3} {warn}")
+        print(f"\t{(i + 1)}\t{j['name']:15} ===> {j['count']:3} {warn}", end=f'{separator:6}')
+        if i % 2 == 1:
+            print()
+    print('* - мало на складе')
 
 
 def add():
@@ -127,10 +135,10 @@ def main(file_path):  # запуск программы
 
     while True:
         print()
-        main_menu = input("-= Главное меню =-"  # типа меню
-                          f"\n\t's' показать все товары\t\t'i' показать один товар"
-                          "\n\t'z' показать отсутствующее\t'a' добавить товар в список"
-                          "\n\t'c' очистить экран\t\t'q' выйти из программы\n")
+        main_menu = input("-= ГЛАВНОЕ МЕНЮ =-"  # типа меню
+                          "\n\t[s] показать всё\t[i] найти"
+                          "\n\t[z] закончились\t\t[a] добавить в список"
+                          "\n\t[c] очистить экран\t[q] выйти из программы\n")
 
         if main_menu in ('s', 'S', 'ы', 'Ы'):  # вывод всего списка
             clear_screen()
@@ -142,6 +150,8 @@ def main(file_path):  # запуск программы
             write_to_file(FILE_PATH, main_list)
 
         elif main_menu in ('i', 'I', 'ш', 'Ш'):
+            clear_screen()
+            print('-= ПОИСК =-')
             # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
             try:
@@ -149,19 +159,18 @@ def main(file_path):  # запуск программы
             except IndexError:
                 print('\nЗАПИСЬ НЕ НАЙДЕНА')
                 continue
-            print()
+            clear_screen()
+            print(f"выбран: {index_changing_count['name']}\n")
             choose_action = input("выберите действие:"
                                   "\n\t'с' изменить количество\t\t'n' изменить название"
                                   "\n\t'd' удалить запись\t\t'm' вернуться в 'главное меню'\n")
             if choose_action in ('c', 'C', 'с', 'С'):
-                new_count = input_nums()
-                index_changing_count['count'] = new_count
+                index_changing_count['count'] = input_nums()
                 print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
 
             if choose_action in ('n', 'N', 'т', 'Т'):
-                new_name = input_type()
-                index_changing_count['name'] = new_name
+                index_changing_count['name'] = input_type()
                 print(f"\n\t{index_changing_count['name']} ____ {index_changing_count['count']}\n")
                 write_to_file(FILE_PATH, main_list)
 
@@ -174,8 +183,9 @@ def main(file_path):  # запуск программы
                 continue
 
         elif main_menu in ('z', 'Z', 'я', 'Я'):
+            clear_screen()
             # вывод записей с нулевыми значениями
-            print('\t-- ТОВАР, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ --')
+            print('\t-= ТОВАР, ОТСУТСТВУЮЩИЙ НА СКЛАДЕ =-')
             for i in main_list:
                 if i['count'] == 0:
                     print(f"\t\t{i['name']}")
