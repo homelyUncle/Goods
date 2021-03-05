@@ -62,12 +62,8 @@ def find(all_items, item_to_find):
 def show_all(all_items):
     for i in range(len(all_items)):
         j = all_items[i]
-        if j['count'] == 0:
-            warn = '-- ТОВАРА НЕТ НА СКЛАДЕ!!! --'
-        elif j['count'] < 2:
-            warn = '-- ПОСЛЕДНИЙ!!! --'
-        elif j['count'] < 3:
-            warn = '-- ПОСЛЕДНИЕ!!! --'
+        if j['count'] < 3:
+            warn = '\t!!!'
         else:
             warn = ''
         print(f"{(i + 1)}\t{j['name']:15} ===> {j['count']:3} {warn}")
@@ -148,7 +144,11 @@ def main(file_path):  # запуск программы
         elif main_menu in ('i', 'I', 'ш', 'Ш'):
             # вывод информации об одной записи
             finding_item = input('введите название/часть названия товара, который нужно найти: ')
-            index_changing_count = main_list[find(main_list, finding_item.lower())]
+            try:
+                index_changing_count = main_list[find(main_list, finding_item.lower())]
+            except IndexError:
+                print('\nЗАПИСЬ НЕ НАЙДЕНА')
+                continue
             print()
             choose_action = input("выберите действие:"
                                   "\n\t'с' изменить количество\t\t'n' изменить название"
