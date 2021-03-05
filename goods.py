@@ -65,6 +65,7 @@ def show_all(all_items):
         if j['count'] == 0:
             warn = '-- ТОВАРА НЕТ НА СКЛАДЕ!!! --'
         elif j['count'] < 2:
+            warn = '-- ПОСЛЕДНИЙ!!! --'
         elif j['count'] < 3:
             warn = '-- ПОСЛЕДНИЕ!!! --'
         else:
