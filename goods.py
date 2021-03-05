@@ -79,7 +79,7 @@ def show_all(all_items):
 
 def add():
     data = add_line()
-    print(f"\n\t\t- - товар <{data['name']}> добавлен в список - -\n")
+    print(f"\n\t\t- - <{data['name']}> добавлен в список - -\n")
     return data
 
 
@@ -136,7 +136,7 @@ def main(file_path):  # запуск программы
     while True:
         print()
         main_menu = input("-= ГЛАВНОЕ МЕНЮ =-"  # типа меню
-                          "\n\t[s] показать всё\t[i] найти"
+                          "\n\t[s] показать всё\t[i] редактировать"
                           "\n\t[z] закончились\t\t[a] добавить в список"
                           "\n\t[c] очистить экран\t[q] выйти из программы\n")
 
@@ -153,7 +153,7 @@ def main(file_path):  # запуск программы
             clear_screen()
             print('-= ПОИСК =-')
             # вывод информации об одной записи
-            finding_item = input('введите название/часть названия товара, который нужно найти: ')
+            finding_item = input('введите название/часть названия того, что нужно отредактировать:')
             try:
                 index_changing_count = main_list[find(main_list, finding_item.lower())]
             except IndexError:
